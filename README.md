@@ -1,6 +1,14 @@
 # Introduction
 This is a project for removing Arabic diacritics from Arabic text.
 
+# How to build using only GHC and Make
+`make`
+
+To clean type:
+
+`make clean`
+
+
 
 # How to build
 stack build

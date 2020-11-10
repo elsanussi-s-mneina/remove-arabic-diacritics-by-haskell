@@ -4,7 +4,7 @@ import System.IO
 import ArabicDiacriticRemoval (removeDiacritics)
 
 
-----Command line options----
+---- Command line options ----
 data Action = RemoveDiacritics  deriving (Show, Eq)
 data Options =
   Options
