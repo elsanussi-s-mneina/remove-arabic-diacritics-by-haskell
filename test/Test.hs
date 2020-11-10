@@ -2,9 +2,9 @@ module Main (main) where
 
 import LittleTest
 
-import qualified LowerTests
+import qualified ArabicDiacriticRemovalTests
 
 main :: IO ()
 main = 
   do
-  LittleTest.reportOnTests LowerTests.tests
+  LittleTest.reportOnTests ArabicDiacriticRemovalTests.tests

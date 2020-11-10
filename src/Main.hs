@@ -1,11 +1,11 @@
 import System.Environment
 import System.Console.GetOpt
 import System.IO
-import Lower
+import ArabicDiacriticRemoval (removeDiacritics)
 
 
 ----Command line options----
-data Action = Lower | Upper  deriving (Show, Eq)
+data Action = RemoveDiacritics  deriving (Show, Eq)
 data Options =
   Options
   { optHelp :: Bool
@@ -17,17 +17,14 @@ defaultOptions :: Options
 defaultOptions =
   Options
   { optHelp = False
-  , optAction = Upper
+  , optAction = RemoveDiacritics
   }
 
 options :: [OptDescr (Options -> Options)]
 options =
-  [ Option ['l'] ["lower"]
-    (NoArg (\ opts -> opts { optAction = Lower}))
-    "Make letters lowercase"
-  , Option ['u'] ["upper"]
-    (NoArg (\ opts -> opts { optAction = Upper}))
-    "Make letters uppercase"
+  [ Option ['r'] ["removed"]
+    (NoArg (\ opts -> opts { optAction = RemoveDiacritics}))
+    "remove diacritics"
   ]
 
 translitOptions :: [String] -> IO (Options, [String])
@@ -37,9 +34,8 @@ translitOptions argv =
     (_,       _,          errors) -> ioError $ userError $ concat errors ++ usageInfo header options
   where header = "Usage: exe [OPTION...] filename"
 
-chooseTranslitFunc :: Action -> (Char -> Char)
-chooseTranslitFunc Lower = lower
-chooseTranslitFunc Upper = upper
+chooseInteractFunction :: Action -> (String -> String)
+chooseInteractFunction RemoveDiacritics = removeDiacritics
 
 
 main :: IO ()
@@ -47,14 +43,14 @@ main =
   do
   argv <- getArgs
   (opts, fname) <- translitOptions argv
-  let translitFunc = chooseTranslitFunc (optAction opts)
+  let interactFunc = chooseInteractFunction (optAction opts)
   if length fname == 1
   then do
       putStrLn ("The file name is " ++ (concat fname))
       handle <- openFile (fname !! 0) ReadMode
       contents <- hGetContents handle
-      putStrLn (map translitFunc contents)
+      putStrLn (interactFunc contents)
       hClose handle
   else do 
-       ll <- getContents 
-       putStrLn $ (map translitFunc ll)
+       ll <- getContents
+       putStrLn $ (interactFunc ll)
