@@ -1,2 +1,8 @@
+# Cabal files directory
+dist-newstyle
+
+# Stack files directory
 .stack-work
+
+# Mac OS file
 .DS_Store
